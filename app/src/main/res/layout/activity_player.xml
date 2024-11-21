@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.PlayerActivity"
+    android:background="@drawable/background_gradient">
+
+    <!-- 歌曲封面 -->
+    <ImageView
+        android:id="@+id/song_cover"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/sample_cover"
+        android:contentDescription="Song Cover"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 歌曲信息（标题和歌手） -->
+    <TextView
+        android:id="@+id/song_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="歌曲名称"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/song_cover"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/artist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="歌手名称"
+        android:textSize="18sp"
+        android:textColor="#BDBDBD"
+        android:textAlignment="center"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/song_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 播放进度条 -->
+    <SeekBar
+        android:id="@+id/seek_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintTop_toBottomOf="@+id/artist_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp" />
+
+    <!-- 控制按钮（播放/暂停、上一首、下一首） -->
+    <LinearLayout
+        android:id="@+id/control_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/seek_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="40dp">
+
+        <!-- 上一首按钮 -->
+        <ImageButton
+            android:id="@+id/previous_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_previous"
+            android:contentDescription="Previous"
+            android:background="@android:color/transparent"
+            android:layout_marginEnd="20dp"
+            android:scaleType="centerInside" />
+
+        <!-- 播放/暂停按钮 -->
+        <ImageButton
+            android:id="@+id/play_pause_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_play"
+            android:contentDescription="Play/Pause"
+            android:background="@android:color/transparent"
+            android:layout_marginEnd="20dp"
+            android:scaleType="centerInside" />
+
+        <!-- 下一首按钮 -->
+        <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_next"
+            android:contentDescription="Next"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

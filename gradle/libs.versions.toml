@@ -1,0 +1,46 @@
+[versions]
+agp = "8.5.2"
+androidxMultidex = "2.0.1"
+compiler = "4.15.1"
+comGithubBumptechGlideGlide2 = "4.15.1"
+comSquareupOkioOkio5 = "3.2.0"
+googleGson = "2.10.1"
+kotlin = "1.9.0"
+coreKtx = "1.10.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+loggingInterceptor = "4.11.0"
+material = "1.10.0"
+activity = "1.8.0"
+constraintlayout = "2.1.4"
+retrofit = "2.9.0"
+rxjavaVersion = "3.1.6"
+firebaseFirestoreKtx = "25.1.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-multidex-multidex = { module = "androidx.multidex:multidex", version.ref = "androidxMultidex" }
+com-github-bumptech-glide-glide3 = { module = "com.github.bumptech.glide:glide", version.ref = "comGithubBumptechGlideGlide2" }
+com-google-code-gson-gson = { module = "com.google.code.gson:gson", version.ref = "googleGson" }
+com-squareup-okio-okio7 = { module = "com.squareup.okio:okio", version.ref = "comSquareupOkioOkio5" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+rxjava3-rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjavaVersion" }
+retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+retrofit2-adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "retrofit" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+

@@ -1,0 +1,6 @@
+n ǐ h ǎo x iǎo h uān @你好小欢
+x iǎo h uān z àn t íng y īn y uè @小欢暂停音乐
+x iǎo h uān b ō f àng y īn y uè @小欢播放音乐
+x iǎo h uān x ià y ī sh ǒu @小欢下一首
+x iǎo h uān sh àng y ī sh ǒu @小欢上一首
+
