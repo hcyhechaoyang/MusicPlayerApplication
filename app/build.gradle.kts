@@ -30,7 +30,6 @@ android {
     sourceSets {
         android.sourceSets["main"].resources.srcDirs(
             "src/main/res",
-            "src/main/libs",
             "src/main/jniLibs"
         )
     }
@@ -47,7 +46,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -69,6 +67,4 @@ dependencies {
     implementation(libs.com.github.bumptech.glide.glide3)
     annotationProcessor(libs.compiler)
     implementation(libs.logging.interceptor)
-
-
 }
