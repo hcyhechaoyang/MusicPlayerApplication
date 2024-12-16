@@ -64,6 +64,22 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        fun checkLoginStatus() {
+            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
+            if (!isLoggedIn) {
+                Log.d("LoginStatus", "用户未登录，跳转到登录界面")
+                // 跳转到登录界面
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()  // 结束当前页面
+            } else {
+                Log.d("LoginStatus", "用户已登录，继续当前操作")
+            }
+        }
+        checkLoginStatus()
+
+
         // 初始化 MusicRepository
         val apiService = ApiService.create() // 创建 ApiService 实例
         musicRepository = MusicRepository(apiService) // 初始化 MusicRepository
@@ -150,6 +166,13 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         // 绑定关键词检测服务
         val serviceIntent = Intent(this, KeywordSpotterService::class.java)
         bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE)
+        binding.profileImage.setOnClickListener {
+            val intent = Intent(this@PlayerActivity, UserCenterActivity::class.java)
+            onDestroy()
+            // 启动 PlayerActivity
+            startActivity(intent)
+
+        }
     }
 
     override fun onKeywordDetected(keyword: String) {
@@ -250,17 +273,6 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         }
     }
 
-//   private fun checkAndRequestPermissions() {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.RECORD_AUDIO),
-//                1001
-//            )
-//        } else {
-//            startKeywordSpotterService()
-//        }
-//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.xiaoyang.musicplayerapplication.data.model.UserResponse
 
 import com.xiaoyang.musicplayerapplication.data.repository.MusicRepository
 import com.xiaoyang.musicplayerapplication.databinding.ActivityMusicBinding
@@ -19,6 +20,7 @@ class MusicActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMusicBinding
     private lateinit var songAdapter: SongAdapter
+    private lateinit var user: UserResponse
     private lateinit var musicRepository: MusicRepository
     private lateinit var apiService: ApiService  // 声明 apiService
 
@@ -27,6 +29,28 @@ class MusicActivity : BaseActivity() {
         // 通过 ViewBinding 加载布局
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fun checkLoginStatus() {
+            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
+            if (!isLoggedIn) {
+                Log.d("LoginStatus", "用户未登录，跳转到登录界面")
+                // 跳转到登录界面
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()  // 结束当前页面
+            } else {
+                Log.d("LoginStatus", "用户已登录，继续当前操作")
+            }
+        }
+        checkLoginStatus()
+        binding.profileImage.setOnClickListener {
+            val intent = Intent(this@MusicActivity, UserCenterActivity::class.java)
+            // 启动 PlayerActivity
+            startActivity(intent)
+        }
+
+
         // 创建 ApiService 实例
         apiService = ApiService.create()
 

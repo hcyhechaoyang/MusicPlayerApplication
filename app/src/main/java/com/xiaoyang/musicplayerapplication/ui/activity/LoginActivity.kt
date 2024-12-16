@@ -1,20 +1,17 @@
 package com.xiaoyang.musicplayerapplication.ui.activity
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
+import android.widget.Toast
+import com.xiaoyang.musicplayerapplication.data.model.UserResponse
+import com.xiaoyang.musicplayerapplication.databinding.ActivityMainBinding
+import com.xiaoyang.musicplayerapplication.network.ApiService
+import com.xiaoyang.musicplayerapplication.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.Toast
-import com.xiaoyang.musicplayerapplication.databinding.ActivityMainBinding
 
-import com.xiaoyang.musicplayerapplication.data.model.UserResponse
-import com.xiaoyang.musicplayerapplication.network.ApiService
-import com.xiaoyang.musicplayerapplication.network.RetrofitClient
 
 class LoginActivity : BaseActivity() {
     lateinit var binding: ActivityMainBinding
@@ -58,6 +55,8 @@ class LoginActivity : BaseActivity() {
                         // 登录成功
                         val user = response.body()
                         if (user != null && user.password == password) {
+                            saveLoginInfo(user.username, user.password)
+
                             Toast.makeText(
                                 this@LoginActivity,
                                 "登录成功，欢迎用户: ${user.username}！",
@@ -98,6 +97,19 @@ class LoginActivity : BaseActivity() {
             }
         })
     }
+
+    fun saveLoginInfo(username: String, password: String) {
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("username", username)
+        editor.putString("password", password)
+        editor.putBoolean("isLoggedIn", true)  // 存储登录状态
+        editor.apply()
+
+        Log.d("LoginInfo", "保存登录信息：用户名 = $username，密码 = $password")
+    }
+
+
 
 }
 

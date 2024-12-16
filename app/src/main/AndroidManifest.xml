@@ -29,6 +29,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.changePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.UserCenterActivity"
             android:exported="false" />
 

@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.UserCenterActivity">
+    tools:context=".ui.activity.UserCenterActivity"
+    android:background="@drawable/background_gradient">
     <!-- 用户名 -->
     <ImageView
         android:id="@+id/avatarImageView"
@@ -13,7 +14,8 @@
         android:layout_height="100dp"
         android:src="@drawable/avatar"
         tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/userNameTextView"
