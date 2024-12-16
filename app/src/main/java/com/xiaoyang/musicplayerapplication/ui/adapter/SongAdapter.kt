@@ -26,7 +26,7 @@ class SongAdapter(
         val song = songList[position]
         Log.d(
             "SongAdapter",
-            "绑定数据: ${song.m_name} - ${song.artist_name}"
+            "绑定数据: ${song.mname} - ${song.artistName}"
         )
         holder.bind(song)
     }
@@ -43,16 +43,16 @@ class SongAdapter(
         fun bind(song: Song) {
             Log.d(
                 "SongAdapter",
-                "绑定数据: ${song.m_name} - ${song.artist_name}-${song.cover_url}-${song.audio_url}"
+                "绑定数据: ${song.mname} - ${song.artistName}-${song.coverUrl}-${song.audioUrl}"
             )
 
             // 设置歌曲名称和艺术家
-            binding.songTitle.text = "歌名：" + song.m_name
-            binding.artistName.text = "歌手：" + song.artist_name
+            binding.songTitle.text = "歌名：" + song.mname
+            binding.artistName.text = "歌手：" + song.artistName
 
             // 使用 Glide 加载图片，并设置默认图片和错误图片
             Glide.with(binding.coverImage.context)
-                .load(song.cover_url)  // 使用网络 URL 加载图片
+                .load(song.coverUrl)  // 使用网络 URL 加载图片
                 .error(R.drawable.default_image)  // 加载失败时显示默认图片
                 .fallback(R.drawable.default_image)  // URL 为 null 时显示默认图片
                 .into(binding.coverImage)
@@ -61,7 +61,7 @@ class SongAdapter(
             binding.root.setOnClickListener {
                 Log.d(
                     "com.xiaoyang.musicplayerapplication.ui.adapter.SongAdapter",
-                    "点击了歌曲: ${song.m_name} - ${song.artist_name}"
+                    "点击了歌曲: ${song.mname} - ${song.artistName}"
                 )
                 onClick(song)
             }

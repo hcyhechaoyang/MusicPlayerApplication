@@ -29,6 +29,7 @@ abstract class BaseActivity : AppCompatActivity(), SensorEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         // 初始化传感器
         sm = getSystemService(SENSOR_SERVICE) as SensorManager
         senor = sm.getDefaultSensor(Sensor.TYPE_LIGHT)!!

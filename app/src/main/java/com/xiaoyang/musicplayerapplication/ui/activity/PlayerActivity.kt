@@ -224,18 +224,18 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                 val song = musicRepository.fetchSongById(songId)
 
                 withContext(Dispatchers.Main) {
-                    if (song != null && !song.audio_url.isNullOrEmpty() && song.audio_url != "1") {
-                        binding.songTitle.text = song.m_name
-                        binding.artistName.text = song.artist_name
+                    if (song != null && !song.audioUrl.isNullOrEmpty() && song.audioUrl != "1") {
+                        binding.songTitle.text = song.mname
+                        binding.artistName.text = song.artistName
                         Glide.with(this@PlayerActivity)
-                            .load(song.cover_url)
+                            .load(song.coverUrl)
                             .into(binding.songCover)
 
                         Log.d(
                             "PlayerActivity",
-                            "成功获取歌曲ID: ${song.id} 并开始播放: ${song.m_name}"
+                            "成功获取歌曲ID: ${song.id} 并开始播放: ${song.mname}"
                         )
-                        startMusic(song.audio_url)
+                        startMusic(song.audioUrl)
                         currentSongId = song.id
                     } else {
                         Log.d("PlayerActivity", "未找到有效的歌曲，尝试获取下一个ID")

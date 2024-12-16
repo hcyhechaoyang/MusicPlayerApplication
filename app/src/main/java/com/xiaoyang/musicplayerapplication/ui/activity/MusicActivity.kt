@@ -70,10 +70,10 @@ class MusicActivity : BaseActivity() {
                         val intent = Intent(this@MusicActivity, PlayerActivity::class.java)
 
                         // 将音频 URL、封面图片 URL、歌名和歌手传递给 PlayerActivity
-                        intent.putExtra("audio_url", song.audio_url)
-                        intent.putExtra("cover_url", song.cover_url)  // 传递封面图片 URL
-                        intent.putExtra("song_title", song.m_name)    // 传递歌名
-                        intent.putExtra("artist_name", song.artist_name)  // 传递歌手名字
+                        intent.putExtra("audio_url", song.audioUrl)
+                        intent.putExtra("cover_url", song.coverUrl)  // 传递封面图片 URL
+                        intent.putExtra("song_title", song.mname)    // 传递歌名
+                        intent.putExtra("artist_name", song.artistName)  // 传递歌手名字
                         intent.putExtra("song_id", song.id)           // 传递歌曲 id
 
                         // 启动 PlayerActivity

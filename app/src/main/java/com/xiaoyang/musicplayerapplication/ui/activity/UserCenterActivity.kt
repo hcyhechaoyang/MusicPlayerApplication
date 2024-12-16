@@ -8,27 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.xiaoyang.musicplayerapplication.data.model.UserResponse
 import com.xiaoyang.musicplayerapplication.databinding.ActivityUserCenterBinding
 
-class UserCenterActivity : AppCompatActivity() {
+class UserCenterActivity : BaseActivity() {
     lateinit var binding: ActivityUserCenterBinding
     lateinit var user: UserResponse
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserCenterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fun checkLoginStatus() {
-            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
-            if (!isLoggedIn) {
-                Log.d("LoginStatus", "用户未登录，跳转到登录界面")
-                // 跳转到登录界面
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()  // 结束当前页面
-            } else {
-                Log.d("LoginStatus", "用户已登录，继续当前操作")
-            }
-        }
-        checkLoginStatus()
         //获取保存的用户名
         val sharedPreferences: SharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val username = sharedPreferences.getString("username", "未登录")
@@ -40,7 +26,7 @@ class UserCenterActivity : AppCompatActivity() {
 
         // 修改密码按钮点击事件
         binding.changePasswordButton.setOnClickListener {
-            val intent = Intent(this, changePasswordActivity::class.java)
+            val intent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(intent)
         }
 

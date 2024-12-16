@@ -31,6 +31,15 @@ interface ApiService {
     @GET("songs/getById")
     fun getSongById(@Query("id") id: Int): Call<Song>
 
+    @FormUrlEncoded
+    @POST("user/changePassword")
+    fun changePassword(
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): Call<Boolean>
+
+
+
 
     companion object {
         // 通过 RetrofitClient 获取 Retrofit 实例，并创建 ApiService
