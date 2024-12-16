@@ -47,8 +47,9 @@ class UserCenterActivity : BaseActivity() {
 
         Log.d("LoginInfo", "用户已退出登录，清除登录信息")
 
-        // 跳转到登录界面
+        // 跳转到登录界面，并清除栈中所有活动
         val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()  // 结束当前页面
     }

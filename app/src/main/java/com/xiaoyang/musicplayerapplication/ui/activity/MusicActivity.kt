@@ -33,6 +33,7 @@ class MusicActivity : BaseActivity() {
         fun checkLoginStatus() {
             val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
             val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
+            Log.d("是否登录", isLoggedIn.toString())
             if (!isLoggedIn) {
                 Log.d("LoginStatus", "用户未登录，跳转到登录界面")
                 // 跳转到登录界面
