@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- 权限声明 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- 连接网络权限，用于执行云端语音能力 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 连接网络权限，用于执行云端语音能力 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 读取网络信息状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 获取当前wifi状态 -->
@@ -29,6 +28,10 @@
         android:theme="@style/Theme.MusicPlayerApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activity.UserCenterActivity"
+            android:exported="false" />
+
         <service
             android:name=".service.KeywordSpotterService"
             android:enabled="true"

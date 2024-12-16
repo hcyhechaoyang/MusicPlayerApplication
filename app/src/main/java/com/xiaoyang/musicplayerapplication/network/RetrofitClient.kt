@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val BASE_URL = "http://39.104.54.87:8080/" // 替换为你的服务端地址
+    private const val BASE_URL = "http://39.104.54.87:8080/"
 
     // 创建 OkHttpClient，添加日志拦截器
     private val client: OkHttpClient by lazy {

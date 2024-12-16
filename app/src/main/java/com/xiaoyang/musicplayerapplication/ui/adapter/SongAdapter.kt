@@ -1,5 +1,6 @@
 package com.xiaoyang.musicplayerapplication.ui.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ class SongAdapter(
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val song = songList[position]
         Log.d(
-            "com.xiaoyang.musicplayerapplication.ui.adapter.SongAdapter",
+            "SongAdapter",
             "绑定数据: ${song.m_name} - ${song.artist_name}"
         )
         holder.bind(song)
@@ -38,9 +39,10 @@ class SongAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         // 绑定数据
+        @SuppressLint("SetTextI18n")
         fun bind(song: Song) {
             Log.d(
-                "com.xiaoyang.musicplayerapplication.ui.adapter.SongAdapter",
+                "SongAdapter",
                 "绑定数据: ${song.m_name} - ${song.artist_name}-${song.cover_url}-${song.audio_url}"
             )
 
