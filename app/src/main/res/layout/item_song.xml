@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/coverImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_default_cover" />
+        android:contentDescription="歌曲封面"
+        android:src="@drawable/ic_default_cover"
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginStart="16dp">
 
         <TextView
@@ -22,13 +27,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Song Title"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/artistName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Artist"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
+
+    <!-- 收藏按钮 -->
+    <ImageButton
+        android:id="@+id/favoriteButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="收藏按钮"
+        android:scaleType="centerInside"
+        android:src="@drawable/collection"
+        tools:ignore="HardcodedText" />
 </LinearLayout>
