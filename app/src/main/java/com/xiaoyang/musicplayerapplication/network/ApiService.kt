@@ -59,6 +59,14 @@ interface ApiService {
         @Query("musicId") musicId: Int
     ): Call<Boolean>
 
+    @FormUrlEncoded
+    @POST("collection/list") // 根据后端的接口路径
+    suspend fun listlike(
+        @Field("username") username: String
+    ): List<Song>
+
+
+
 
     companion object {
         // 通过 RetrofitClient 获取 Retrofit 实例，并创建 ApiService

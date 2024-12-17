@@ -20,7 +20,6 @@ class MusicActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMusicBinding
     private lateinit var songAdapter: SongAdapter
-    private lateinit var user: UserResponse
     private lateinit var musicRepository: MusicRepository
     private lateinit var apiService: ApiService  // 声明 apiService
 

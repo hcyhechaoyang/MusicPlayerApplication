@@ -9,10 +9,6 @@ import com.bumptech.glide.Glide
 import com.xiaoyang.musicplayerapplication.R
 import com.xiaoyang.musicplayerapplication.databinding.ItemSongBinding
 import com.xiaoyang.musicplayerapplication.data.model.Song
-import com.xiaoyang.musicplayerapplication.network.ApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SongAdapter(
     private val songList: List<Song>,    // 音乐列表
