@@ -47,8 +47,25 @@
         app:layout_constraintTop_toBottomOf="@+id/song_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <!-- 收藏按钮 -->
 
     <!-- 播放进度条 -->
+
+    <ImageButton
+        android:id="@+id/favoriteButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="48dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="收藏按钮"
+        android:scaleType="centerInside"
+        android:src="@drawable/collection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.932"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/song_cover"
+        tools:ignore="HardcodedText,MissingConstraints" />
+
     <SeekBar
         android:id="@+id/seek_bar"
         android:layout_width="0dp"

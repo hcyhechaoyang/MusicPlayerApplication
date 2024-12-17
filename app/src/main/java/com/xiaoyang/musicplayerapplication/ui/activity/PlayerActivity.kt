@@ -1,6 +1,8 @@
 package com.xiaoyang.musicplayerapplication.ui.activity
 
-import android.Manifest
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -12,7 +14,6 @@ import android.widget.SeekBar
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.xiaoyang.musicplayerapplication.R
-import com.xiaoyang.musicplayerapplication.data.model.Song
 import com.xiaoyang.musicplayerapplication.data.repository.MusicRepository
 import com.xiaoyang.musicplayerapplication.databinding.ActivityPlayerBinding
 import com.xiaoyang.musicplayerapplication.network.ApiService
@@ -22,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.media.MediaPlayer
-import androidx.core.app.ActivityCompat
 
 class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedListener {
 
@@ -174,6 +174,42 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             startActivity(intent)
 
         }
+        // 收藏按钮点击事件
+        binding.favoriteButton.setOnClickListener {
+            Log.d(
+                "收藏",
+                "点击了收藏按钮: $songTitleText - $artistNameText"
+            )
+
+
+            val sharedPreferences = binding.root.context.getSharedPreferences("UserPrefs", 0)
+            val username = sharedPreferences.getString("username", "")
+
+            // 确保用户名存在
+            if (!username.isNullOrEmpty()) {
+                // 调用后端 API 来收藏歌曲
+                ApiService.create().addToCollection(username, currentSongId)
+                    .enqueue(object : Callback<Boolean> {
+                        override fun onResponse(
+                            call: Call<Boolean>,
+                            response: Response<Boolean>
+                        ) {
+                            if (response.isSuccessful && response.body() == true) {
+                                // 收藏成功后更新按钮图标
+                                binding.favoriteButton.setImageResource(R.drawable.collection2)  // 已收藏图标
+                            } else {
+                                Log.e("收藏", "收藏失败")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                            Log.e("收藏", "网络请求失败", t)
+                        }
+                    })
+            } else {
+                Log.e("收藏", "用户名为空，无法收藏")
+            }
+        }
     }
 
     override fun onKeywordDetected(keyword: String) {
@@ -225,7 +261,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                 val song = musicRepository.fetchSongById(songId)
 
                 withContext(Dispatchers.Main) {
-                    if (song != null && !song.audioUrl.isNullOrEmpty() && song.audioUrl != "1") {
+                    if (song != null && song.audioUrl.isNotEmpty() && song.audioUrl != "1") {
                         binding.songTitle.text = song.mname
                         binding.artistName.text = song.artistName
                         Glide.with(this@PlayerActivity)

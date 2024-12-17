@@ -47,7 +47,7 @@ class SongAdapter(
         fun bind(song: Song) {
             Log.d(
                 "SongAdapter",
-                "绑定数据: ${song.mname} - ${song.artistName}-${song.coverUrl}-${song.audioUrl}"
+                "绑定数据: 音乐名称：${song.mname} - 作者：${song.artistName}-封面：${song.coverUrl}-音乐Url：${song.audioUrl}"
             )
 
             // 设置歌曲名称和艺术家
@@ -68,43 +68,6 @@ class SongAdapter(
                     "点击了歌曲: ${song.mname} - ${song.artistName}"
                 )
                 onClick(song)
-            }
-
-            // 收藏按钮点击事件
-            binding.favoriteButton.setOnClickListener {
-                Log.d(
-                    "SongAdapter",
-                    "点击了收藏按钮: ${song.mname} - ${song.artistName}"
-                )
-
-                // 模拟获取当前用户名（你可以从登录信息中获取）
-                val sharedPreferences = binding.root.context.getSharedPreferences("UserPrefs", 0)
-                val username = sharedPreferences.getString("username", "")
-
-                // 确保用户名存在
-                if (username != null && username.isNotEmpty()) {
-                    // 调用后端 API 来收藏歌曲
-                    ApiService.create().addToCollection(username, song.id)
-                        .enqueue(object : Callback<Boolean> {
-                            override fun onResponse(
-                                call: Call<Boolean>,
-                                response: Response<Boolean>
-                            ) {
-                                if (response.isSuccessful && response.body() == true) {
-                                    // 收藏成功后更新按钮图标
-                                    binding.favoriteButton.setImageResource(R.drawable.collection2)  // 已收藏图标
-                                } else {
-                                    Log.e("SongAdapter", "收藏失败")
-                                }
-                            }
-
-                            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                                Log.e("SongAdapter", "网络请求失败", t)
-                            }
-                        })
-                } else {
-                    Log.e("SongAdapter", "用户名为空，无法收藏")
-                }
             }
         }
     }
