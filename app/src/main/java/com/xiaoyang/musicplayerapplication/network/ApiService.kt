@@ -3,6 +3,7 @@ package com.xiaoyang.musicplayerapplication.network
 import com.xiaoyang.musicplayerapplication.data.model.Song
 import com.xiaoyang.musicplayerapplication.data.model.UserResponse
 import retrofit2.Call
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -42,9 +43,21 @@ interface ApiService {
     @POST("collection/add")
     fun addToCollection(
         @Field("username") username: String,
-        @Field("music_id") musicId: Int
+        @Field("musicId") musicId: Int
     ): Call<Boolean>
 
+    @FormUrlEncoded
+    @POST("collection/judge")
+    fun judgelike(
+        @Field("username") username: String,
+        @Field("musicId") musicId: Int
+    ): Call<Boolean>
+
+    @DELETE("collection/deletelike")
+    fun removeFromCollection(
+        @Query("username") username: String,
+        @Query("musicId") musicId: Int
+    ): Call<Boolean>
 
 
     companion object {

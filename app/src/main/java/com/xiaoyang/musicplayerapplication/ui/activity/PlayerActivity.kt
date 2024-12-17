@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.media.MediaPlayer
+import androidx.core.content.ContextCompat
 
 class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedListener {
 
@@ -174,42 +175,102 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             startActivity(intent)
 
         }
-        // 收藏按钮点击事件
+// 初始化按钮图标
+        val sharedPreferences = binding.root.context.getSharedPreferences("UserPrefs", 0)
+        val username = sharedPreferences.getString("username", "")
+
+        if (!username.isNullOrEmpty()) {
+            Log.d("收藏", "用户名: $username 当前歌曲ID:$currentSongId")
+            ApiService.create().judgelike(username, currentSongId)
+                .enqueue(object : Callback<Boolean> {
+                    override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                        if (response.isSuccessful && response.body() == true) {
+                            // 如果已收藏，设置为已收藏图标
+                            Log.d("收藏", "歌曲已收藏，设置为已收藏图标")
+                            binding.favoriteButton.setImageResource(R.drawable.collection2)
+                        } else {
+                            // 如果未收藏，设置为未收藏图标
+                            Log.d("收藏", "歌曲未收藏，设置为未收藏图标")
+                            binding.favoriteButton.setImageResource(R.drawable.collection)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                        Log.e("收藏", "网络请求失败", t)
+                    }
+                })
+        } else {
+            Log.e("收藏", "用户名为空，无法判断是否已收藏")
+        }
+
+// 收藏按钮点击事件
         binding.favoriteButton.setOnClickListener {
-            Log.d(
-                "收藏",
-                "点击了收藏按钮: $songTitleText - $artistNameText"
-            )
-
-
-            val sharedPreferences = binding.root.context.getSharedPreferences("UserPrefs", 0)
-            val username = sharedPreferences.getString("username", "")
+            Log.d("收藏", "点击了收藏按钮: $songTitleText - $artistNameText")
 
             // 确保用户名存在
             if (!username.isNullOrEmpty()) {
-                // 调用后端 API 来收藏歌曲
-                ApiService.create().addToCollection(username, currentSongId)
-                    .enqueue(object : Callback<Boolean> {
-                        override fun onResponse(
-                            call: Call<Boolean>,
-                            response: Response<Boolean>
-                        ) {
-                            if (response.isSuccessful && response.body() == true) {
-                                // 收藏成功后更新按钮图标
-                                binding.favoriteButton.setImageResource(R.drawable.collection2)  // 已收藏图标
-                            } else {
-                                Log.e("收藏", "收藏失败")
-                            }
-                        }
+                Log.d("收藏", "用户名: $username")
 
-                        override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                            Log.e("收藏", "网络请求失败", t)
-                        }
-                    })
+                // 先判断当前按钮的状态
+                val isCurrentlyFavorited = binding.favoriteButton.drawable.constantState ==
+                        ContextCompat.getDrawable(
+                            binding.root.context,
+                            R.drawable.collection2
+                        )?.constantState
+
+                if (isCurrentlyFavorited) {
+                    Log.d("收藏", "当前状态：已收藏，点击后准备取消收藏")
+
+                    // 如果是已收藏状态，点击后取消收藏
+                    ApiService.create().removeFromCollection(username, currentSongId)
+                        .enqueue(object : Callback<Boolean> {
+                            override fun onResponse(
+                                call: Call<Boolean>,
+                                response: Response<Boolean>
+                            ) {
+                                if (response.isSuccessful && response.body() == true) {
+                                    Log.d("收藏", "取消收藏成功")
+                                    // 取消收藏成功后更新按钮图标
+                                    binding.favoriteButton.setImageResource(R.drawable.collection)  // 未收藏图标
+                                } else {
+                                    Log.e("收藏", "取消收藏失败")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                                Log.e("收藏", "网络请求失败", t)
+                            }
+                        })
+                } else {
+                    Log.d("收藏", "当前状态：未收藏，点击后准备添加收藏")
+
+                    // 如果是未收藏状态，点击后添加收藏
+                    ApiService.create().addToCollection(username, currentSongId)
+                        .enqueue(object : Callback<Boolean> {
+                            override fun onResponse(
+                                call: Call<Boolean>,
+                                response: Response<Boolean>
+                            ) {
+                                if (response.isSuccessful && response.body() == true) {
+                                    Log.d("收藏", "收藏成功")
+                                    // 收藏成功后更新按钮图标
+                                    binding.favoriteButton.setImageResource(R.drawable.collection2)  // 已收藏图标
+                                } else {
+                                    Log.e("收藏", "收藏失败")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                                Log.e("收藏", "网络请求失败", t)
+                            }
+                        })
+                }
             } else {
                 Log.e("收藏", "用户名为空，无法收藏")
             }
         }
+
+
     }
 
     override fun onKeywordDetected(keyword: String) {
