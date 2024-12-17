@@ -38,6 +38,12 @@ interface ApiService {
         @Field("password") password: String
     ): Call<Boolean>
 
+    @FormUrlEncoded
+    @POST("collection/add")
+    fun addToCollection(
+        @Field("username") username: String,
+        @Field("music_id") musicId: Int
+    ): Call<Boolean>
 
 
 
