@@ -11,7 +11,9 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ApiService {
-
+    /**
+     * 用户注册
+     */
     @FormUrlEncoded
     @POST("user/register")
     fun registerUser(
@@ -19,6 +21,9 @@ interface ApiService {
         @Field("password") password: String
     ): Call<Boolean>
 
+    /**
+     * 用户登录
+     */
     @FormUrlEncoded
     @POST("user/login")
     fun loginUser(
@@ -29,9 +34,15 @@ interface ApiService {
     @GET("songs")  // 后端接口是 /songs
     suspend fun getSongs(): List<Song>
 
+    /**
+     * 根据歌曲id获取音乐数据
+     */
     @GET("songs/getById")
     fun getSongById(@Query("id") id: Int): Call<Song>
 
+    /**
+     * 修改密码
+     */
     @FormUrlEncoded
     @POST("user/changePassword")
     fun changePassword(
@@ -39,6 +50,9 @@ interface ApiService {
         @Field("password") password: String
     ): Call<Boolean>
 
+    /**
+     * 添加收藏
+     */
     @FormUrlEncoded
     @POST("collection/add")
     fun addToCollection(
@@ -46,6 +60,9 @@ interface ApiService {
         @Field("musicId") musicId: Int
     ): Call<Boolean>
 
+    /**
+     * 判断歌曲是否被收藏
+     */
     @FormUrlEncoded
     @POST("collection/judge")
     fun judgelike(
@@ -53,14 +70,20 @@ interface ApiService {
         @Field("musicId") musicId: Int
     ): Call<Boolean>
 
+    /**
+     * 删除收藏
+     */
     @DELETE("collection/deletelike")
     fun removeFromCollection(
         @Query("username") username: String,
         @Query("musicId") musicId: Int
     ): Call<Boolean>
 
+    /**
+     * 获取个人收藏列表
+     */
     @FormUrlEncoded
-    @POST("collection/list") // 根据后端的接口路径
+    @POST("collection/list")
     suspend fun listlike(
         @Field("username") username: String
     ): List<Song>
