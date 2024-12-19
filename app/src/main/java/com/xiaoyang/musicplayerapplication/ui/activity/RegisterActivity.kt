@@ -50,17 +50,22 @@ class RegisterActivity : BaseActivity() {
     private fun registerUser(username: String, password: String) {
         apiService.registerUser(username, password).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@RegisterActivity, "注册成功！请登录", Toast.LENGTH_SHORT)
-                        .show()
+                if (response.body().toString() == "true") {
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "注册成功！请登录---{${response.body()}}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     // 跳转到LoginActivity
                     val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    Log.e("注册错误", "Response Code: ${response.code()}")
-                    Toast.makeText(this@RegisterActivity, "注册失败，请重试", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "用户名重复，请更换用户名！",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 

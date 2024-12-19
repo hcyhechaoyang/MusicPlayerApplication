@@ -62,10 +62,10 @@ class LoginActivity : BaseActivity() {
                                 "登录成功，欢迎用户: ${user.username}！",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            // 跳转到PlayerActivity
+                            // 跳转到MusicActivity
                             val intent = Intent(this@LoginActivity, MusicActivity::class.java)
                             startActivity(intent)
-//                            finish() // 可选，防止用户返回登录页面
+//                            finish() // 防止用户返回登录页面
                         }
                     }
 

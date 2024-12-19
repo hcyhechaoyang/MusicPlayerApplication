@@ -37,6 +37,9 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
     private var keywordSpotterService: KeywordSpotterService? = null
     private var isBound = false
 
+    /**
+     * 语音后台服务
+     */
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as KeywordSpotterService.LocalBinder
@@ -48,23 +51,34 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
 
             // 服务绑定后，启动关键词检测
             keywordSpotterService?.startRecording()
-            Log.d("PlayerActivity", "关键词检测服务已启动")
+            Log.d("语音服务", "关键词检测服务已启动")
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             keywordSpotterService = null
             isBound = false
-            Log.d("PlayerActivity", "关键词检测服务已断开")
+            Log.d("语音服务", "关键词检测服务已断开")
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // 使用 ViewBinding 绑定布局
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //进入个人中心
+        binding.profileImage.setOnClickListener {
+            val intent = Intent(this@PlayerActivity, UserCenterActivity::class.java)
+            onDestroy()
+            // 启动 PlayerActivity
+            startActivity(intent)
+        }
+
+        /**
+         * 检测登录状态
+         */
         fun checkLoginStatus() {
             val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
             val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
@@ -84,7 +98,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
 
         // 初始化 MusicRepository
         val apiService = ApiService.create() // 创建 ApiService 实例
-        musicRepository = MusicRepository(apiService) // 初始化 MusicRepository
+        musicRepository = MusicRepository(apiService)
 
         // 初始化 MediaPlayer
         mediaPlayer = MediaPlayer()
@@ -96,9 +110,9 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         val artistNameText = intent.getStringExtra("artist_name")
         currentSongId = intent.getIntExtra("song_id", -1)  // 获取歌曲的 id
 
-        Log.d("PlayerActivity", "初始歌曲ID: $currentSongId")
+        Log.d("歌曲信息", "初始歌曲ID: $currentSongId")
         Log.d(
-            "PlayerActivity",
+            "歌曲信息",
             "传递的歌曲信息 - 音频URL: $audioUrl, 封面URL: $coverUrl, 歌名: $songTitleText, 歌手: $artistNameText"
         )
 
@@ -107,9 +121,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         binding.artistName.text = artistNameText
 
         // 加载封面图片
-        Glide.with(this)
-            .load(coverUrl)
-            .into(binding.songCover)
+        Glide.with(this).load(coverUrl).into(binding.songCover)
 
         // 播放/暂停按钮点击事件
         binding.playPauseButton.setOnClickListener {
@@ -145,46 +157,43 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         }
 
         // 播放进度条更新
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    mediaPlayer?.seekTo(progress)
-                    Log.d("PlayerActivity", "用户拖动进度条到位置: $progress")
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                Log.d("PlayerActivity", "开始拖动进度条")
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                Log.d("PlayerActivity", "停止拖动进度条")
-            }
-        })
+//        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                if (fromUser) {
+//                    mediaPlayer?.seekTo(progress)
+//                    Log.d("PlayerActivity", "用户拖动进度条到位置: $progress")
+//                }
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//                Log.d("PlayerActivity", "开始拖动进度条")
+//            }
+//
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+//                Log.d("PlayerActivity", "停止拖动进度条")
+//            }
+//        })
 
         // 获取当前歌曲
         fetchSongById(currentSongId) // 获取当前歌曲的信息
 
-        // 绑定关键词检测服务
-        val serviceIntent = Intent(this, KeywordSpotterService::class.java)
-        bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE)
-        binding.profileImage.setOnClickListener {
-            val intent = Intent(this@PlayerActivity, UserCenterActivity::class.java)
-            onDestroy()
-            // 启动 PlayerActivity
-            startActivity(intent)
+        //绑定关键词检测服务
+        startKeywordSpotterService()
+//        val serviceIntent = Intent(this, KeywordSpotterService::class.java)
+//        bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE)
 
-        }
-// 初始化按钮图标
+        /**
+         * 收藏功能
+         */
+        // 初始化按钮图标
         val sharedPreferences = binding.root.context.getSharedPreferences("UserPrefs", 0)
         val username = sharedPreferences.getString("username", "")
-
         if (!username.isNullOrEmpty()) {
             Log.d("收藏", "用户名: $username 当前歌曲ID:$currentSongId")
             ApiService.create().judgelike(username, currentSongId)
                 .enqueue(object : Callback<Boolean> {
                     override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                        if (response.isSuccessful && response.body() == true) {
+                        if (response.isSuccessful && response.body().toString() == "true") {
                             // 如果已收藏，设置为已收藏图标
                             Log.d("收藏", "歌曲已收藏，设置为已收藏图标")
                             binding.favoriteButton.setImageResource(R.drawable.collection2)
@@ -203,7 +212,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             Log.e("收藏", "用户名为空，无法判断是否已收藏")
         }
 
-// 收藏按钮点击事件
+        // 收藏按钮点击事件
         binding.favoriteButton.setOnClickListener {
             Log.d("收藏", "点击了收藏按钮: $songTitleText - $artistNameText")
 
@@ -228,7 +237,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                                 call: Call<Boolean>,
                                 response: Response<Boolean>
                             ) {
-                                if (response.isSuccessful && response.body() == true) {
+                                if (response.body().toString() == "true") {
                                     Log.d("收藏", "取消收藏成功")
                                     // 取消收藏成功后更新按钮图标
                                     binding.favoriteButton.setImageResource(R.drawable.collection)  // 未收藏图标
@@ -251,7 +260,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                                 call: Call<Boolean>,
                                 response: Response<Boolean>
                             ) {
-                                if (response.isSuccessful && response.body() == true) {
+                                if (response.body().toString() == "true") {
                                     Log.d("收藏", "收藏成功")
                                     // 收藏成功后更新按钮图标
                                     binding.favoriteButton.setImageResource(R.drawable.collection2)  // 已收藏图标
@@ -273,15 +282,18 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
 
     }
 
+    /**
+     * 唤醒功能语音检测
+     */
     override fun onKeywordDetected(keyword: String) {
-        Log.d("PlayerActivity", "识别到唤醒词：$keyword")
+        Log.d("语音服务", "识别到唤醒词：$keyword")
 
         when (keyword) {
             "小欢暂停音乐" -> pauseMusic()
             "小欢播放音乐" -> resumeMusic()
             "小欢上一首" -> playPreviousSong()
             "小欢下一首" -> playNextSong()
-            else -> Log.d("PlayerActivity", "未定义的唤醒词：$keyword")
+            else -> Log.d("语音服务", "未定义的唤醒词：$keyword")
         }
     }
 
@@ -322,13 +334,10 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                 val song = musicRepository.fetchSongById(songId)
 
                 withContext(Dispatchers.Main) {
-                    if (song != null && song.audioUrl.isNotEmpty() && song.audioUrl != "1") {
+                    if (song != null && song.audioUrl.isNotEmpty()) {
                         binding.songTitle.text = song.mname
                         binding.artistName.text = song.artistName
-                        Glide.with(this@PlayerActivity)
-                            .load(song.coverUrl)
-                            .into(binding.songCover)
-
+                        Glide.with(this@PlayerActivity).load(song.coverUrl).into(binding.songCover)
                         Log.d(
                             "PlayerActivity",
                             "成功获取歌曲ID: ${song.id} 并开始播放: ${song.mname}"
@@ -371,7 +380,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         }
     }
 
-
+    //检测权限
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -386,6 +395,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         }
     }
 
+    //绑定关键词检测服务函数
     private fun startKeywordSpotterService() {
         val serviceIntent = Intent(this, KeywordSpotterService::class.java)
         bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE)
