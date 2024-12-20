@@ -1,5 +1,6 @@
 package com.xiaoyang.musicplayerapplication.ui.activity
 
+import android.annotation.SuppressLint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.media.MediaPlayer
+import android.os.Handler
+import android.os.Looper
 import androidx.core.content.ContextCompat
 
 class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedListener {
@@ -32,7 +35,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
     private var mediaPlayer: MediaPlayer? = null
     private var isPlaying = false
     private var currentSongId: Int = 0 // 当前播放歌曲的 ID
-
+    private val handler = Handler(Looper.getMainLooper())
     // 关键词检测服务绑定变量
     private var keywordSpotterService: KeywordSpotterService? = null
     private var isBound = false
@@ -120,6 +123,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
         binding.songTitle.text = songTitleText
         binding.artistName.text = artistNameText
 
+
         // 加载封面图片
         Glide.with(this).load(coverUrl).into(binding.songCover)
 
@@ -152,35 +156,42 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             mediaPlayer?.start()
             isPlaying = true
             binding.playPauseButton.setImageResource(R.drawable.pause)
+            binding.totalTime.text = formatTime(mediaPlayer!!.duration)
+
+            binding.seekBar.max = mediaPlayer!!.duration
             updateSeekBar()
             Log.d("PlayerActivity", "音乐已开始播放")
         }
 
         // 播放进度条更新
-//        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                if (fromUser) {
-//                    mediaPlayer?.seekTo(progress)
-//                    Log.d("PlayerActivity", "用户拖动进度条到位置: $progress")
-//                }
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//                Log.d("PlayerActivity", "开始拖动进度条")
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//                Log.d("PlayerActivity", "停止拖动进度条")
-//            }
-//        })
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    mediaPlayer?.seekTo(progress)
+                    binding.currentTime.text = formatTime(progress)
+                    Log.d("PlayerActivity", "用户拖动进度条到位置: $progress")
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                Log.d("PlayerActivity", "开始拖动进度条")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                Log.d("PlayerActivity", "停止拖动进度条")
+            }
+        })
+        // 监听播放完成
+        mediaPlayer!!.setOnCompletionListener {
+            handler.removeCallbacksAndMessages(null) // 停止更新
+            binding.seekBar.progress = 0
+            binding.currentTime.text = formatTime(0)
+        }
 
         // 获取当前歌曲
-        fetchSongById(currentSongId) // 获取当前歌曲的信息
-
+        fetchSongById(currentSongId)
         //绑定关键词检测服务
         startKeywordSpotterService()
-//        val serviceIntent = Intent(this, KeywordSpotterService::class.java)
-//        bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE)
 
         /**
          * 收藏功能
@@ -282,6 +293,16 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
 
     }
 
+
+    @SuppressLint("DefaultLocale")
+    private fun formatTime(progress: Int): String {
+        val seconds = (progress / 1000) % 60
+        val minutes = (progress / 1000) / 60
+        return String.format("%d:%02d", minutes, seconds)
+
+    }
+
+
     /**
      * 唤醒功能语音检测
      */
@@ -372,13 +393,26 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
     }
 
     private fun updateSeekBar() {
-        val position = mediaPlayer?.currentPosition ?: 0
-        binding.seekBar.progress = position
+        // 检查 mediaPlayer 是否为空
+        val currentPosition = mediaPlayer?.currentPosition ?: 0
 
-        if (isPlaying) {
+        // 检查 binding 是否初始化且视图仍然附着到窗口
+        if (::binding.isInitialized && binding.root.isAttachedToWindow) {
+            binding.seekBar.progress = currentPosition
+            binding.currentTime.text = formatTime(currentPosition)
+        } else {
+            Log.d("PlayerActivity", "updateSeekBar：绑定未初始化或 view 已分离。")
+            return // 直接退出，避免异常
+        }
+
+        // 如果音乐正在播放，延迟 1 秒后更新
+        if (isPlaying && mediaPlayer != null) {
             binding.seekBar.postDelayed({ updateSeekBar() }, 1000)
+        } else {
+            Log.d("PlayerActivity", "updateSeekBar：mediaPlayer 为 null 或不正在播放。")
         }
     }
+
 
     //检测权限
     override fun onRequestPermissionsResult(
@@ -404,15 +438,27 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
     override fun onDestroy() {
         Log.d("PlayerActivity", "释放 MediaPlayer 资源")
         super.onDestroy()
+
+        // 清除 Handler 回调
+        handler.removeCallbacksAndMessages(null)
+
+        // 释放 MediaPlayer 资源
         mediaPlayer?.release()
         mediaPlayer = null
 
         // 解绑关键词检测服务
         if (isBound) {
+            Log.d("语言服务", "解绑关键词检测服务")
             keywordSpotterService?.setOnKeywordDetectedListener(null) // 清除监听器
             keywordSpotterService?.stopRecording()
-            unbindService(serviceConnection)
-            isBound = false
+            try {
+                unbindService(serviceConnection)
+                isBound = false
+                Log.d("语言服务", "关键词检测服务解绑完成")
+            } catch (e: IllegalArgumentException) {
+                Log.e("语言服务", "服务未绑定或解绑时出错: ${e.message}")
+            }
         }
     }
+
 }
