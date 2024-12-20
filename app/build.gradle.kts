@@ -67,4 +67,5 @@ dependencies {
     implementation(libs.com.github.bumptech.glide.glide3)
     annotationProcessor(libs.compiler)
     implementation(libs.logging.interceptor)
+
 }
