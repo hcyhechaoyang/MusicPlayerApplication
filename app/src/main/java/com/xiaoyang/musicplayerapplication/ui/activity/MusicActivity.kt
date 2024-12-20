@@ -56,18 +56,25 @@ class MusicActivity : BaseActivity() {
         Log.d("MusicActivity", "开始进行歌曲搜索：$query")
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 调用 MusicRepository 中的搜索方法，这里假设有一个 fetchSongsBySearch 方法
                 val searchResults = musicRepository.fetchNameSongs(query)
-                Log.d("MusicActivity", "成功获取搜索结果：${searchResults.size} 首歌")
 
+                // 切换到主线程显示搜索结果
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@MusicActivity,
+                        "成功获取搜索结果：${searchResults.size} 首歌",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d("MusicActivity", "成功获取搜索结果：${searchResults.size} 首歌")
+                }
+
+                // 处理 UI 更新
                 withContext(Dispatchers.Main) {
                     if (searchResults.isNotEmpty()) {
                         // 设置搜索结果的适配器
                         songAdapter = SongAdapter(searchResults) { song ->
                             // 点击事件，传递音频 URL、封面图片 URL、歌名和歌手名进行播放
                             val intent = Intent(this@MusicActivity, PlayerActivity::class.java)
-
-                            // 将音频 URL、封面图片 URL、歌名和歌手传递给 PlayerActivity
                             intent.putExtra("audio_url", song.audioUrl)
                             intent.putExtra("cover_url", song.coverUrl)  // 传递封面图片 URL
                             intent.putExtra("song_title", song.mname)    // 传递歌名
@@ -83,11 +90,19 @@ class MusicActivity : BaseActivity() {
                         Log.d("MusicActivity", "RecyclerView 适配器已设置")
                     } else {
                         Log.d("MusicActivity", "未找到相关歌曲")
-                        Toast.makeText(this@MusicActivity, "未找到相关歌曲", Toast.LENGTH_LONG)
+                        Toast.makeText(applicationContext, "未找到相关歌曲", Toast.LENGTH_LONG)
                             .show()
                     }
                 }
             } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        applicationContext,
+                        "搜索歌曲失败: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
                 Log.e("MusicActivity", "搜索歌曲失败: ${e.message}")
             }
         }

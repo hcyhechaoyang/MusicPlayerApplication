@@ -11,9 +11,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:padding="16dp">
+        android:padding="10dp">
 
-        <!-- 个人中心小头像 -->
 
         <!-- 搜索框 -->
         <EditText
@@ -45,7 +44,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="1dp"
             android:contentDescription="Profile"
             android:src="@drawable/avatar"
             tools:ignore="HardcodedText" />
