@@ -40,6 +40,10 @@ interface ApiService {
     @GET("songs/getById")
     fun getSongById(@Query("id") id: Int): Call<Song>
 
+
+    @GET("songs/searchByName")  // 后端接口是 /songs
+    suspend fun searchByName(@Query("mname") mname: String): List<Song>
+
     /**
      * 修改密码
      */

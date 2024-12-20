@@ -13,5 +13,9 @@ class MusicRepository(private val apiService: ApiService) {
         val response = apiService.getSongById(songId).execute()
         return if (response.isSuccessful) response.body() else null
     }
+    suspend fun fetchNameSongs(mname: String): List<Song> {
+        return apiService.searchByName(mname)
+    }
+
 
 }
