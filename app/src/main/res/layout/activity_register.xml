@@ -5,7 +5,20 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.RegisterActivity">
+    tools:context=".ui.activity.RegisterActivity"
+    android:background="@drawable/bj">
+
+    <ImageView
+        android:id="@+id/musiclogin"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="96dp"
+        android:src="@drawable/musiclogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 标题 -->
     <TextView
@@ -15,7 +28,7 @@
         android:text="注册新账号"
         android:textSize="30sp"
         android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

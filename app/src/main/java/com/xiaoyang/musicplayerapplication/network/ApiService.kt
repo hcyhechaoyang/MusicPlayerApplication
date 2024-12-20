@@ -31,7 +31,7 @@ interface ApiService {
         @Field("password") password: String
     ): Call<UserResponse>
 
-    @GET("songs")  // 后端接口是 /songs
+    @GET("songs/")  // 后端接口是 /songs
     suspend fun getSongs(): List<Song>
 
     /**

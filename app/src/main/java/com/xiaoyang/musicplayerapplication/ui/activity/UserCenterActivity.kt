@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class UserCenterActivity : AppCompatActivity() {
+class UserCenterActivity : BaseActivity() {
 
     lateinit var binding: ActivityUserCenterBinding
     private lateinit var songAdapter: SongAdapter

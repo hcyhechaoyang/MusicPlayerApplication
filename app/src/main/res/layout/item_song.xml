@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:weightSum="1"
-    android:background="@drawable/background_gradient">
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/coverImage"
@@ -38,6 +37,13 @@
             android:text="Artist"
             android:textSize="14sp"
             tools:ignore="HardcodedText" />
+
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/default_image"
+        android:scaleType="centerInside" />
 
 </LinearLayout>

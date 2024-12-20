@@ -5,57 +5,94 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.LoginActivity">
+    tools:context=".ui.activity.LoginActivity"
+    android:fitsSystemWindows="false"
+    android:background="@drawable/bj">
+
 
     <!-- 标题 -->
+
+    <!-- 用户名输入框容器 -->
+
+    <ImageView
+        android:id="@+id/musiclogin"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="96dp"
+        android:src="@drawable/musiclogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="欢迎登录"
-        android:textSize="30sp"
-        android:textColor="#000000"
+        android:layout_marginTop="200dp"
         android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/username"
+        android:text="欢迎登录"
+        android:textColor="#000000"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/username_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 用户名输入框 -->
-    <EditText
-        android:id="@+id/username"
+    <LinearLayout
+        android:id="@+id/username_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="请输入用户名"
-        android:textColor="#FF4081"
-        android:padding="15dp"
-        android:background="@drawable/edittext_bg"
-        android:textSize="16sp"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
         app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="35dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <!-- 密码输入框 -->
-    <EditText
-        android:id="@+id/password"
+
+        <!-- 用户名输入框 -->
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="8"
+            android:hint="请输入用户名"
+            android:padding="12dp"
+            android:textColor="#FF4081"
+            android:background="@drawable/edittext_bg"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- 密码输入框容器 -->
+    <LinearLayout
+        android:id="@+id/password_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="请输入密码"
-        android:textColor="#FF4081"
-        android:padding="15dp"
-        android:background="@drawable/edittext_bg"
-        android:inputType="textPassword"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp" />
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        app:layout_constraintTop_toBottomOf="@+id/username_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <!-- 密码输入框 -->
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="8"
+            android:hint="请输入密码"
+            android:textColor="#FF4081"
+            android:padding="12dp"
+            android:background="@drawable/edittext_bg"
+            android:inputType="textPassword"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <!-- 登录按钮 -->
     <Button
@@ -66,15 +103,14 @@
         android:textSize="18sp"
         android:textColor="#FFFFFF"
         android:background="@drawable/button_background"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="25dp"
         android:elevation="4dp" />
-
 
     <!-- 注册提示 -->
     <TextView
@@ -84,7 +120,7 @@
         android:text="没有账号？立即注册"
         android:textColor="#4CAF50"
         android:textSize="14sp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintTop_toBottomOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
