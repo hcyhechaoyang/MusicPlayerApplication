@@ -9,18 +9,14 @@
     android:background="@drawable/bj">
     <!-- 用户名 -->
 
-
     <ImageView
         android:id="@+id/avatarImageView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/avatar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.111" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="155dp"
+        tools:layout_editor_absoluteY="62dp" />
 
     <TextView
         android:id="@+id/userNameTextView"
@@ -45,9 +41,7 @@
         android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@+id/userNameTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 退出按钮 -->
     <Button
@@ -60,9 +54,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/changePasswordButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 收藏歌单标题 -->
     <TextView
