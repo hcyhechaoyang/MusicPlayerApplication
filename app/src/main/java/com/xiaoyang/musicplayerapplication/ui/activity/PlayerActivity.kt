@@ -67,7 +67,6 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 使用 ViewBinding 绑定布局
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -78,31 +77,10 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             // 启动 PlayerActivity
             startActivity(intent)
         }
-
-        /**
-         * 检测登录状态
-         */
-        fun checkLoginStatus() {
-            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
-            Log.d("是否登录", isLoggedIn.toString())
-            if (!isLoggedIn) {
-                Log.d("LoginStatus", "用户未登录，跳转到登录界面")
-                // 跳转到登录界面
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()  // 结束当前页面
-            } else {
-                Log.d("LoginStatus", "用户已登录，继续当前操作")
-            }
-        }
         checkLoginStatus()
 
-
         // 初始化 MusicRepository
-        val apiService = ApiService.create() // 创建 ApiService 实例
-        musicRepository = MusicRepository(apiService)
-
+        musicRepository = MusicRepository(ApiService.create())
         // 初始化 MediaPlayer
         mediaPlayer = MediaPlayer()
 
@@ -163,7 +141,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             Log.d("PlayerActivity", "音乐已开始播放")
         }
 
-        // 播放进度条更新
+        // 播放进度条更新监听
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -187,7 +165,6 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             binding.seekBar.progress = 0
             binding.currentTime.text = formatTime(0)
         }
-
         // 获取当前歌曲
         fetchSongById(currentSongId)
         //绑定关键词检测服务
@@ -294,15 +271,6 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
     }
 
 
-    @SuppressLint("DefaultLocale")
-    private fun formatTime(progress: Int): String {
-        val seconds = (progress / 1000) % 60
-        val minutes = (progress / 1000) / 60
-        return String.format("%d:%02d", minutes, seconds)
-
-    }
-
-
     /**
      * 唤醒功能语音检测
      */
@@ -315,6 +283,29 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
             "小欢上一首" -> playPreviousSong()
             "小欢下一首" -> playNextSong()
             else -> Log.d("语音服务", "未定义的唤醒词：$keyword")
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun formatTime(progress: Int): String {
+        val seconds = (progress / 1000) % 60
+        val minutes = (progress / 1000) / 60
+        return String.format("%d:%02d", minutes, seconds)
+
+    }
+
+    private fun checkLoginStatus() {
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态
+        Log.d("是否登录", isLoggedIn.toString())
+        if (!isLoggedIn) {
+            Log.d("LoginStatus", "用户未登录，跳转到登录界面")
+            // 跳转到登录界面
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()  // 结束当前页面
+        } else {
+            Log.d("LoginStatus", "用户已登录，继续当前操作")
         }
     }
 
@@ -414,7 +405,7 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
     }
 
 
-    //检测权限
+    //检测录音权限
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

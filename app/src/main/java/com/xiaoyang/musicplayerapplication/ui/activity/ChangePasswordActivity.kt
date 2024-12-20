@@ -37,8 +37,6 @@ class ChangePasswordActivity : BaseActivity() {
                 Toast.makeText(this, "两次密码输入不一致", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            // 使用 Retrofit 发送请求修改密码
             Log.d("name", "用户名：" + username + "密码：" + newPassword)
             changePassword(username, newPassword)
         }
@@ -48,23 +46,17 @@ class ChangePasswordActivity : BaseActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         // 使用 ApiService 实例创建 API 服务
         val apiService = ApiService.create()
-
         // 调用接口方法
         val call = apiService.changePassword(username, newPassword)
-
         call.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-
                 if (response.isSuccessful) {
-                    val isSuccess = response.body() ?: false
-                    if (isSuccess) {
-
+                    if (response.body().toString() == "true") {
                         Toast.makeText(
                             this@ChangePasswordActivity,
                             "密码修改成功",
                             Toast.LENGTH_SHORT
                         ).show()
-
                         startActivity(intent)
                     } else {
                         Toast.makeText(

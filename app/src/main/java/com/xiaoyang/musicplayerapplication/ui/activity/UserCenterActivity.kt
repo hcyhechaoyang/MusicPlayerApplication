@@ -21,8 +21,8 @@ class UserCenterActivity : BaseActivity() {
 
     lateinit var binding: ActivityUserCenterBinding
     private lateinit var songAdapter: SongAdapter
-    private lateinit var apiService: ApiService  // 声明 apiService
-    private var username: String? = null  // 存储用户名
+    private lateinit var apiService: ApiService
+    private var username: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +55,6 @@ class UserCenterActivity : BaseActivity() {
 
         // 初始化 ApiService 实例
         apiService = ApiService.create()
-
         // 获取收藏的歌曲列表
         fetchSongs()
     }
@@ -101,9 +100,7 @@ class UserCenterActivity : BaseActivity() {
         val editor = sharedPreferences.edit()
         editor.clear()  // 清除所有存储的数据
         editor.apply()
-
         Log.d("LoginInfo", "用户已退出登录，清除登录信息")
-
         // 跳转到登录界面，并清除栈中所有活动
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

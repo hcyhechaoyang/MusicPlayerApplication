@@ -37,8 +37,6 @@ class RegisterActivity : BaseActivity() {
                 registerUser(username, password)
             }
         }
-
-        // 设置登录提示点击事件
         binding.loginHint.setOnClickListener {
             // 跳转到LoginActivity
             val intent = Intent(this, LoginActivity::class.java)

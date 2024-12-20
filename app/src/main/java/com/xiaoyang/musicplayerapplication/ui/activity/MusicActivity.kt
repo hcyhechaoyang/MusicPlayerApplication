@@ -21,7 +21,7 @@ class MusicActivity : BaseActivity() {
     private lateinit var binding: ActivityMusicBinding
     private lateinit var songAdapter: SongAdapter
     private lateinit var musicRepository: MusicRepository
-    private lateinit var apiService: ApiService  // 声明 apiService
+    private lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +41,6 @@ class MusicActivity : BaseActivity() {
         // 获取歌曲列表
         Log.d("MusicActivity", "开始请求歌曲数据")
         loadSongs()
-
-        // 搜索框点击事件
         binding.search.setOnClickListener {
             val searchName = binding.searchBox.text.toString()
 
@@ -53,7 +51,7 @@ class MusicActivity : BaseActivity() {
         }
     }
 
-    // 搜索歌曲方法
+    // 歌曲搜索
     private fun searchSongs(query: String) {
         Log.d("MusicActivity", "开始进行歌曲搜索：$query")
         CoroutineScope(Dispatchers.IO).launch {
@@ -95,6 +93,7 @@ class MusicActivity : BaseActivity() {
         }
     }
 
+    // 歌曲列表初始化
     private fun loadSongs() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -124,6 +123,7 @@ class MusicActivity : BaseActivity() {
         }
     }
 
+    // 检查登录状态
     private fun checkLoginStatus() {
         val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false) // 获取登录状态

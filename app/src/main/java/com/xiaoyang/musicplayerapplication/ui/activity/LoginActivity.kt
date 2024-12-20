@@ -24,7 +24,6 @@ class LoginActivity : BaseActivity() {
         // 初始化Retrofit API服务
         apiService = RetrofitClient.instance.create(ApiService::class.java)
 
-        // 设置登录按钮的点击事件
         binding.loginButton.setOnClickListener {
             val username = binding.username.text.toString()
             val password = binding.password.text.toString()
@@ -36,10 +35,7 @@ class LoginActivity : BaseActivity() {
             }
         }
 
-        // 设置注册提示点击事件
         binding.registerHint.setOnClickListener {
-//            Toast.makeText(this, "跳转到注册页面（未实现）", Toast.LENGTH_SHORT).show()
-
             // 跳转到RegisterActivity
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
@@ -56,7 +52,6 @@ class LoginActivity : BaseActivity() {
                         val user = response.body()
                         if (user != null && user.password == password) {
                             saveLoginInfo(user.username, user.password)
-
                             Toast.makeText(
                                 this@LoginActivity,
                                 "登录成功，欢迎用户: ${user.username}！",
@@ -65,27 +60,23 @@ class LoginActivity : BaseActivity() {
                             // 跳转到MusicActivity
                             val intent = Intent(this@LoginActivity, MusicActivity::class.java)
                             startActivity(intent)
-//                            finish() // 防止用户返回登录页面
                         }
                     }
-
+                    // 用户名不存在
                     404 -> {
-                        // 用户名不存在
                         Toast.makeText(
                             this@LoginActivity,
                             "用户名不存在，请先注册",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-
+                    // 密码错误
                     401 -> {
-                        // 密码错误
                         Toast.makeText(this@LoginActivity, "密码错误，请重试", Toast.LENGTH_SHORT)
                             .show()
                     }
-
+                    // 其他错误
                     else -> {
-                        // 其他错误
                         Toast.makeText(this@LoginActivity, "登录失败", Toast.LENGTH_SHORT).show()
                     }
                 }
