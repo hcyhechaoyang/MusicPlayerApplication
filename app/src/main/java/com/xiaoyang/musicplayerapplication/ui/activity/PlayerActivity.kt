@@ -227,6 +227,11 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                             ) {
                                 if (response.body().toString() == "true") {
                                     Log.d("收藏", "取消收藏成功")
+                                    Toast.makeText(
+                                        this@PlayerActivity,
+                                        "已取消收藏",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     // 取消收藏成功后更新按钮图标
                                     binding.favoriteButton.setImageResource(R.drawable.collection)  // 未收藏图标
                                 } else {
@@ -250,6 +255,11 @@ class PlayerActivity : BaseActivity(), KeywordSpotterService.OnKeywordDetectedLi
                             ) {
                                 if (response.body().toString() == "true") {
                                     Log.d("收藏", "收藏成功")
+                                    Toast.makeText(
+                                        this@PlayerActivity,
+                                        "收藏成功",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     // 收藏成功后更新按钮图标
                                     binding.favoriteButton.setImageResource(R.drawable.collection2)  // 已收藏图标
                                 } else {

@@ -20,7 +20,6 @@ interface ApiService {
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<Boolean>
-
     /**
      * 用户登录
      */

@@ -47,10 +47,9 @@
         app:layout_constraintTop_toBottomOf="@+id/song_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+
     <!-- 收藏按钮 -->
-
-    <!-- 播放进度条 -->
-
     <ImageButton
         android:id="@+id/favoriteButton"
         android:layout_width="40dp"
